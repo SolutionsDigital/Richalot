@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        html,
+      body {
+        font-family: Arial, sans-serif;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        height: 100%;
+        position: relative;
+      }
+      input {
+        font-size: 12px;
+      }
+      h1 {
+        color: #525454;
+        font-size: 22px;
+        margin: 0 0 10px 0;
+        text-align: center;
+      }
+      #hide-listings,
+      #show-listings {
+        width: 48%;
+      }
+      hr {
+        background: #D0D7D9;
+        height: 1px;
+        margin: 20px 0 20px 0;
+        border: none;
+      }
+      #map {
+        bottom:0px;
+        height: 100%;
+        left: 362px;
+        position: absolute;
+        right: 0px;
+      }
+      .options-box {
+        background: #fff;
+        border: 1px solid #999;
+        border-radius: 3px;
+        height: 100%;
+        line-height: 35px;
+        padding: 10px 10px 30px 10px;
+        text-align: left;
+        width: 340px;
+      }
+      #pano {
+        width: 200px;
+        height: 200px;
+      }
+      .text {
+        font-size: 12px;
+      }
+      #toggle-drawing {
+        width: 27%;
+        position: relative;
+        margin-left: 10px;
+      }
+        
+        #zoom-to-are-text {
+            position: relative;
+            width: 70%;
+        }
+        
+        #zoom-to-area {
+            width: 24%
+        }
+    
+    </style>
+</head>
+<body>
+    <div class="container">
+      <div class="options-box">
+        <h1>Find Your Way on the All Saints Anglican School Campus</h1>
+        <div>
+            <input id="show-listings" type="button" value="Show Listings">
+            <input id="hide-listings" type="button" value="Hide Listings">
+            <hr>
+            <span class="text">Draw a shape to search within it for school buildings</span>
+            <input id="toggle-drawing" type="button" value="Drawing Tools">            
+        </div>
+        <hr>
+        <div>
+            <input id="zoom-to-area-text" type="text" placeholder="Enter your favourite area!">
+            <input id="zoom-to-area" type="button" value="Zoom">
+        </div>  
+      </div>
+      <div id="map"></div>
+    </div>
+
+    <script>
+        var map;
+
+        // create an array of markers
+        var markers = [];
+        
+        // global variable to capture the coordinate points of a polygon when drawn on a map
+        var polygon = null;
+
+        function initMap(){
+            
+            //constructor creates a new map. Only value needed are 1. centre (lng and lat)) of map and zoom level
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: {lat:-28.06065, lng:153.361394},
+                zoom: 18
+                });
+            
+            var drawingManager = new google.maps.drawing.DrawingManager({
+                drawingMode: google.maps.drawing.OverlayType.POLYGON,
+                drawingControl: true,
+                drawingControlOptions: {
+                    position: google.maps.ControlPosition.TOP_LEFT,
+                    drawingModes: [
+                        google.maps.drawing.OverlayType.POLYGON
+                        ]
+                    }
+                });
+                
+            // locations commented out provide a better display on the Satelite view (which is at   an angle)
+            var locations = [
+                {title: 'Nairn Theatre', location:{lat:-28.060662, lng:153.361772}},
+                <!--{title: 'Nairn Theatre', location:{lat:-28.060529, lng:153.361819}},-->
+
+                {title: 'Library', location:{lat:-28.06095, lng:153.361883}},
+                <!--{title: 'Library', location:{lat:-28.060873, lng:153.361913}},-->
+
+                {title: 'All Saints Chapel', location:{lat:-28.06122,lng:153.362049}},
+                <!--{title: 'All Saints Chapel', location:{lat:-28.061144,lng:153.362065}},-->
+
+                {title: 'CSI', location:{lat:-28.061539,lng:153.362896}},
+                <!--{title: 'CSI, Centre for Scientific Investigation', location:{lat:-28.061372,lng:153.362817}},-->
+
+                {title: 'Main oval', location:{lat: -28.060684,lng:153.363115}},
+                <!--{title: 'Main oval', location:{lat: -28.060652,lng:153.36316}},-->
+
+                {title: 'T Block (Humanities)', location:{lat: -28.061765,lng:153.36305}},
+                <!--{title: 'T Block (Humanities)', location:{lat: -28.061632,lng:153.362958}},-->
+
+                {title: 'Q Block (Maths)', location:{lat: -28.061661,lng:153.3623341}},
+                <!--{title: 'Q Block (Maths)', location:{lat: -28.061591,lng:153.362334}},-->
+
+                {title: 'S Block (Technology)', location:{lat: -28.06214,lng:153.36259}},
+                <!--{title: 'S Block (Technology)', location:{lat: -28.062058,lng:153.362611}},-->
+
+                {title: 'O Block (Year 9)', location:{lat: -28.061525,lng:153.361726}},
+                <!--{title: 'O Block (Year 9)', location:{lat: -28.061452,lng:153.361742}},-->
+
+                {title: 'P Block (Main Admin, Visual arts and Careers Centre)', location:{lat: -28.061935,lng:153.362015}},
+                <!--{title: 'P Block (Main Admin, Visual arts and Careers Centre)', location:{lat: -28.061787,lng:153.362017}},-->
+
+                {title: 'HPE', location:{lat:-28.061944,lng:153.363483}}
+                <!--{title: 'HPE', location:{lat:-28.061771,lng:153.363426}}-->
+
+                ];
+
+            var LargeInfowindow = new google.maps.InfoWindow();
+            var bounds = new google.maps.LatLngBounds();
+        
+            // loop through the array of markers to create markers upon creating the map
+            for (var i = 0; i < locations.length; i++){
+                // retrieve the position of the marker
+                var position = locations[i].location;
+                // retrieve the name of the place
+                var title = locations[i].title;
+                //create the marker
+                var marker = new google.maps.Marker({
+                    position: position,
+                    title: title,
+                    animation: google.maps.Animation.DROP,
+                    id: i
+                    });
+
+                // push the marker that are created through this loop into "markers", the array created above
+                markers.push(marker);
+                // extend the boundaries of the map if the marker positioned is outside the viewport
+                bounds.extend(marker.position);
+
+                // listen to the onclick event on markers to display the infowindow for that marker
+                marker.addListener('click', function(){
+                    populateInfoWindow(this, LargeInfowindow);
+                    });
+                }
+            document.getElementById('show-listings').addEventListener('click', showListings);
+            document.getElementById('hide-listings').addEventListener('click', hideListings);
+            
+            document.getElementById('toggle-drawing').addEventListener('click',function(){
+                toggleDrawing(drawingManager);;
+            });
+            
+            document.getElementById('zoom-to-area').addEventListener('click', function(){
+                zoomToArea();
+            });
+            
+            // add an event listener to capture the coordinate points of a polygon when a polygon // is drawn and call the searchWithinPolygon function. theis will show the buildings
+            // within that polygon only and hide any outside the polygon
+            drawingManager.addListener('overlaycomplete',function(event){
+                //first check if there is already an existing polygon
+                //if there is remove it and remove the markers
+                //this limits the user to one polygon at a time
+                if (polygon){
+                    polygon.setMap(null);
+                    hideListings();
+                    }
+                //switch the drawing mode off i.e. to the hand
+                drawingManager.setDrawingMode(null);
+                //capture the overlay and assign it to polygon
+                polygon = event.overlay;
+                polygon.setEditable(true);
+                //call the searchWIthinPolygon function
+                searchWithinPolygon();
+                //add event listeners on the polygon itself if the polygon is changed
+                //so that the markers are updated
+                //see above, polygon is editable
+                polygon.getPath().addListener('set_at',searchWithinPolygon);
+                polygon.getPath().addListener('insert_at', searchWithinPolygon);
+                
+            });
+            
+            }
+
+        // function to populate the infowindow when the marker is clicked 
+        function populateInfoWindow(marker, infowindow){
+            // check the infowindow on this marker is not already open
+            if (infowindow.marker != marker){
+                infowindow.marker = marker;
+                infowindow.setContent('<div>' + marker.title + '</div>');
+                infowindow.open(map, marker);
+                // clear the marker property is closed if the infowindow is closed
+                infowindow.addListener('closeclick', function(){
+                    infowindow.setMarker(null);
+                    });
+                };
+            };
+        
+        function showListings(){
+                var bounds = new google.maps.LatLngBounds();
+                // extend the boundaries of the map for each marker and display the marker
+                for (var i = 0; i < markers.length; i++) {
+                    markers[i].setMap(map);
+                    bounds.extend(markers[i].position);
+                    }
+                    map.fitBounds(bounds);
+                    };
+                
+        function hideListings(){
+                for (var i = 0; i<markers.length; i++){
+                    markers[i].setMap(null);
+                    };    
+                };
+        
+        function toggleDrawing(drawingManager){
+            if (drawingManager.map){
+                drawingManager.setMap(null);
+                // if the user drew anything, get rid of it
+                if (polygon !== null) {
+                    polygon.setMap(null);
+                }
+            } else {
+                drawingManager.setMap(map);
+            }
+        };
+        
+        function searchWithinPolygon(){
+            for (var i = 0; i < markers.length; i++){
+                if (google.maps.geometry.poly.containsLocation(markers[i].position, polygon)){
+                    markers[i].setMap(map);
+                } else {
+                    markers[i].setMap(null);
+                }
+            }
+        };
+        
+        // this function takes input from the user in the "zoom-area-to-text" text input
+        // geocodes that area and zooms on it
+        
+        function zoomToArea(){
+            //create a geocoder object
+            var geocoder = new google.maps.Geocoder();
+            //retrieve the address  or place that the user entered and store it
+            var address = document.getElementById('zoom-to-area-text').value;
+            // make sure the text input area is not blank
+            if (address == ''){
+                window.alert('You must enter an address or place name.');
+            } else {
+                // geocode the address of place and centre the map on it
+                geocoder.geocode(
+                { address: address,
+                    componentRestrictions: {locality : 'Gold Coast'}
+                }, function(results,status) {
+                    if(status == google.maps.GeocoderStatus.OK) {
+                        map.setCenter(results[0].geometry.location);
+                        map.setZoom(20);
+                    } else {
+                        window.alert('We could not find that location. Try a more specific place');
+                    }
+                })
+            }   
+        }
+        
+    </script>
+    
+    <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=drawing,geometry&key=AIzaSyDYLbmiA6jXb29eeC7-iwG-I2dFEXGn0eM&v=3&callback=initMap"></script>
+</body>
+</html>

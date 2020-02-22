@@ -1,0 +1,44 @@
+<!--Code is from https://www.w3schools.com/html/html5_geolocation.asp-->
+<!--Comments are my own-->
+<!DOCTYPE html>
+<html>
+<body>
+
+<p>Click the button to get your coordinates.</p>
+
+<button onclick="getLocation()">Try It</button>
+
+<!--The element with the "map" Id will be affected by the getElementById function-->
+<div id="map"></div>
+
+ 
+<script>
+    
+//store the first part of the command for ease of use
+var x = document.getElementById("map");
+
+    
+//The getCurrentPosition() method returns a coordinates object to the function specified in the parameter //(showPosition)
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+  } else { 
+    x.innerHTML = "Geolocation is not supported by this browser.";
+  }
+}
+
+//The showPosition function displays the output of the getCurrentPosition function
+//It reads the properties of the coordinates object
+function showPosition(position) {
+    var latlon = position.coords.latitude + "," + position.coords.longitude;
+    var img_url = "https://maps.googleapis.com/maps/api/staticmap?center=  "+latlon+"&zoom=16&size=800x600&markers=color:blue%7C"+latlon+"&sensor=false&key=AIzaSyDMCqNjfxQgIvwtM50FnUAL_EKD2HpR7dQ";
+    
+    document.getElementById("map").innerHTML = "<img src='"+img_url+"'>";
+}
+
+    
+    
+</script>
+    
+    </body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Leaflet test</title>
+    
+<!--    Leaflet css-->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
+   integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+   crossorigin=""/>
+    
+<!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"
+   integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
+   crossorigin=""></script>
+    
+    <style>
+        #mapid { height: 800px; }
+    </style>
+</head>
+    
+<body>
+     <div id="mapid"></div>
+    
+    <script>
+        var mymap = L.map('mapid').setView([-28.06065,153.361394], 15);
+        
+//        OSM tiles
+        L.tileLayer( 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+            subdomains: ['a','b','c'],
+            maxZoom: 18
+        }).addTo( mymap );
+        
+
+//        Mapbox tiles
+//        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+//            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+//            maxZoom: 18,
+//            id: 'mapbox.streets',
+//            accessToken: 'pk.eyJ1IjoianJpY2hhbG90IiwiYSI6ImNqcDBubWk3cTJyMmIzcG85ZDNjczE1M2EifQ._PUg2hngKE3tdV91i1e_QA'
+//            }).addTo(mymap);
+
+//      Add marker to the map
+        var marker = L.marker([-28.06065,153.361394]).addTo(mymap);
+        
+//      Add circle to the map. See doc to add polygon
+        var circle = L.circle([-28.06088,153.362534], {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: 0.1,
+            radius: 260
+            }).addTo(mymap);
+        
+//      Add a popup to the marker object and open it by default
+//        marker.bindPopup("<b>All Saints Anglican School</b><br>Main admin building.").openPopup();
+
+//      Marker is clickable by default i.e. click to show
+        marker.bindPopup("<b>All Saints Anglican School</b><br>Main admin building.");
+        
+//      Add a popup to the circle object it will open upon clikck anywhere in the circle
+        circle.bindPopup("40km/h zone before and after school");
+
+//        Add popup to polygon
+//        polygon.bindPopup("I am a polygon.");
+        
+//        You can add a popu to a standalone layer 
+//        var popup = L.popup()
+//            .setLatLng([-28.060,153.361])
+//            .setContent("I am a standalone popup.")
+//            .openOn(mymap);
+
+//        define the onMapClick function
+        var popup = L.popup();
+
+        function onMapClick(e) {
+            popup
+                .setLatLng(e.latlng)
+                .setContent("You clicked the map at " + e.latlng.toString())
+                .openOn(mymap);    
+        }
+
+//        capture a click event on the map and execute the function
+        mymap.on('click', onMapClick);
+    
+    </script>
+    
+</body>
+</html>

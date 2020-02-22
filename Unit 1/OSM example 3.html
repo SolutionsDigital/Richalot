@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css" type="text/css">
+    <style>
+      .map {
+        height: 400px;
+        width: 100%;
+      }
+    </style>
+    
+<!--    include the OpenLayers javascript library-->
+    <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
+      
+    <title>OpenLayers example</title>      
+  </head>
+    
+    
+  <body>
+    <h2>My Map</h2>
+<!--      create a <div> element to host the map. The map width and height are -->
+<!--      controled through the css above -->
+    <div id="map" class="map"></div>
+      
+<!--      Javascript to create the map -->
+    <script type="text/javascript">
+//        Create a OpenLayers Map object
+      var map = new ol.Map({
+//        The value of the target argument is the name of the host HTML <div> element  
+        target: 'map',
+//          The layers: [ ... ] array is used to define the list of layers available in the map.               The first and only layer right now is a tiled layer.
+        layers: [
+          new ol.layer.Tile({
+//          Layers in OpenLayers are defined with a type (Image, Tile or Vector) which contains a               source. The source is the protocol used to get the map tiles.
+            source: new ol.source.OSM()
+          })
+        ],
+//         The view allows to specify the center, resolution, and rotation of the map
+        view: new ol.View({
+          center: ol.proj.fromLonLat([153.361394 ,-28.06065]),
+          zoom: 15
+        })
+      });
+    </script>
+  </body>
+</html>

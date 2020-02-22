@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,
+    initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie-edge">
+    <title>All Saints Anglican School Campus Map</title>
+    <style media="screen">
+      #map{
+        height:800px;
+        width:100%;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>All Saints Anglican School Campus <map>
+    </map></h1>
+    <div id="map"></div>
+    <script type="text/javascript">
+      function initMap() {
+        var options = {
+          // Map options
+          zoom: 18,
+          center:{lat:-28.06065, lng:153.361394}
+        }
+
+        // New map
+        var map = new google.maps.Map(document.getElementById('map'), options);
+/*
+        //Add marker
+        var marker = new google.maps.Marker({
+          position:{lat:-28.060662, lng:153.361772},
+          map:map,
+          icon: 'http://maps.google.com/mapfiles/ms/icons/blue.png'
+          //icon:'https://www.asas.qld.edu.au/img/favicon.ico'
+        });
+
+        var infoWindow = new google.maps.InfoWindow({
+          content:'<h4>All Saints Chapel</h4>'
+        });
+
+        marker.addListener('click', function(){
+          infoWindow.open(map, marker);
+        });
+        */
+
+        // Add array of markers
+        var markers = [
+          {
+            coords:{lat:-28.060662, lng:153.361772},
+            iconImage:'https://www.asas.qld.edu.au/img/favicon.ico',
+            content:'<h4>All Saints Chapel</h4>'
+          },
+          {
+            coords:{lat:-28.061539,lng:153.362896},
+            iconImage:'https://www.asas.qld.edu.au/img/favicon.ico',
+            content:'<h4>CSI - Centre for Scientific Investigations</h4><p>Office:<ul><li>Ms C. Cuskelly</li><li>Ms D. Edwards</li><li>Ms E. Merrin</li><li>Mr M. David-Tooze</li></ul>'
+          },
+          {
+            coords:{lat:-28.061944,lng:153.363483},
+            iconImage:'https://www.asas.qld.edu.au/img/favicon.ico',
+            content:'<h4>HPE - Health and Physical Education Centre</h4><p>Office:<ul><li>Mr F. Leslie</li><li>Ms D. Cairns</li></ul>'
+          },
+            {
+            coords:{lat:-28.061800,lng:153.363483},
+            iconImage:'https://www.asas.qld.edu.au/img/favicon.ico',
+            content:'<h4>Zac Den</h4><p>Office:<ul><li>Mr Z. Fydler</li><li>Mr. Spencer B.</li></ul>'
+          }
+        ];
+
+        // Loop through markers
+        for(var i = 0;i < markers.length; i++){
+          addMarker(markers[i]);
+        }
+
+        // Add marker function
+        function addMarker(props){
+          var marker = new google.maps.Marker({
+            position:props.coords,
+            map:map,
+            //icon:props.iconImage
+            //icon: 'http://maps.google.com/mapfiles/ms/icons/blue.png'
+            //icon:'https://www.asas.qld.edu.au/img/favicon.ico'
+          });
+
+          //check for custom icon
+          if(props.iconImage){
+            // set icon Image
+            marker.setIcon(props.iconImage);
+          }
+
+          // check content for infoWindow
+          if(props.content){
+            var infoWindow = new google.maps.InfoWindow({
+              content:props.content
+            });
+
+            marker.addListener('click', function(){
+              infoWindow.open(map, marker);
+            });
+          }
+
+        }
+
+      }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMCqNjfxQgIvwtM50FnUAL_EKD2HpR7dQ&callback=initMap"
+        async defer></script>
+  </body>
+</html>

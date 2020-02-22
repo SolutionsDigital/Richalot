@@ -1,0 +1,36 @@
+<html>
+    <body>
+        <div id="mapdiv"></div>
+        <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+        <script>
+            map = new OpenLayers.Map("mapdiv");
+            map.addLayer(new OpenLayers.Layer.OSM());
+
+            var lonLat = new OpenLayers.LonLat( 153.361394 ,-28.06065 )
+                .transform(
+                    new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
+                    map.getProjectionObject() // to Spherical Mercator Projection
+                );
+            
+            var zoom=18;
+            
+            
+            var markers = new OpenLayers.Layer.Markers( "Hello World" );
+            map.addLayer(markers);
+            
+//            // A popup with some information about our location
+//                var popup = new OpenLayers.Popup.FramedCloud("Popup",
+//                    lonLat.getBounds().getCenterLonLat(),
+//                    null,
+//                    '<a target="_blank" href="http://openlayers.org/">We</a> ' +
+//                    'could be here.<br>Or elsewhere.', null,
+//                    true // <-- true if we want a close (X) button, false otherwise
+//                );
+    
+            markers.addMarker(new OpenLayers.Marker(lonLat));
+    
+            map.setCenter (lonLat, zoom);
+//            map.addPopup(popup);
+        </script>
+    </body>
+</html>

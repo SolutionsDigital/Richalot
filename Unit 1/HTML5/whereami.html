@@ -1,0 +1,47 @@
+<!--Code is from https://www.w3schools.com/html/html5_geolocation.asp-->
+<!--Comments are my own-->
+<!DOCTYPE html>
+<html>
+<body>
+
+<p>Click the button to appear on the map.</p>
+
+<button onclick="getLocation()">Try It</button>
+
+
+<!--The element with the "demo" Id will be affected by the getElementById function-->
+<p id="demo"></p>
+<img id="MapUser" src="">
+<button onclick="howFar()">How far is it?</button>
+
+<script>
+//store the first part of the command for ease of use
+//var x = document.getElementById("MapUser");
+var lat = '';
+var long = '';
+
+//The getCurrentPosition() method returns a coordinates object to the function specified in the parameter //(showPosition)
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+  } else { 
+    x.innerHTML = "Geolocation is not supported by this browser.";
+  }
+}
+
+//The showPosition function displays the output of the getCurrentPosition function
+//It reads the properties of the coordinates object
+function showPosition(position) {
+//  x.innerHTML = "Latitude: " + position.coords.latitude + 
+//  "<br>Longitude: " + position.coords.longitude;
+    lat = position.coords.latitude;
+    long = position.coords.longitude;
+    document.getElementById("MapUser").src = 'https://maps.googleapis.com/maps/api/staticmap?center='+lat+','+long+'&zoom=14&size=800x600&sensor=false&key=AIzaSyDMCqNjfxQgIvwtM50FnUAL_EKD2HpR7dQ';
+    
+    
+}
+    
+</script>
+
+</body>
+</html>
