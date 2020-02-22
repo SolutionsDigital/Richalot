@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta id="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- CDN for the chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <!-- CDN for Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+    <title>Film Guide App</title>
+</head>
+
+<body>
+    <div id="demo" class="carousel slide" data-ride="carousel">
+
+        <!-- Indicators -->
+        <ul class="carousel-indicators">
+            <li data-target="#demo" data-slide-to="0" class="active"></li>
+            <li data-target="#demo" data-slide-to="1"></li>
+            <li data-target="#demo" data-slide-to="2"></li>
+        </ul>
+
+        <!-- The slideshow -->
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+            <img src="banner1.png" style="width:100%" alt="banner 1">
+        </div>
+        <div class="carousel-item">
+            <img src="banner2.png" style="width:100%" alt="banner 2">
+        </div>
+        <div class="carousel-item">
+            <img src="banner3.png" style="width:100%" alt="banner 3">
+        </div>
+        </div>
+        <!-- Left and right controls -->
+        <a class="carousel-control-prev" href="#demo" data-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+        </a>
+        <a class="carousel-control-next" href="#demo" data-slide="next">
+        <span class="carousel-control-next-icon"></span>
+        </a>
+
+    </div>
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container_fluid p-3 my-3">
+        <h1 class="display-4">The Film Guide App</h1>      
+        <h2>Tell me who you are, I'll tell you what to watch.</h2>
+    </div>
+
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark sticky-top ">
+        <a class="navbar-brand" href="#"><img src="./FilmAppLogo.png" style="height:50px" alt="The Film Guide App logo"></a>
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item ">
+                <a class="nav-link" href="https://www.nytimes.com/section/movies" target="_blank">The NYT</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="https://www.palacecinemas.com.au/" target="_blank">Palace Cinemas</a>
+            </li>
+        </ul>
+        <!-- The following is not implemented -->
+        <form class="form-inline">
+            <input id="NYTAPIKey" class="form-control mr-sm-2" type="text" placeholder="Search reviews">
+            <button class="btn btn-success" id="enterKey" type="submit"  onclick="someSearch()">Search</button>
+        </form>
+    </nav>
+
+<div class="container_fluid p-3 my-3 ">
+    <div" class="row">
+        <div class="col-sm-6" style="background-color:rgb(91, 211, 225);">
+            
+            <blockquote class="blockquote">
+                <br>
+                <p>People prefer movies and atmospheres that reinforce their own personality traits, preferences and values</p>
+                <footer class="blockquote-footer">Said someone one day</footer>
+            </blockquote>
+
+            <form id="whoAreYou" action="">
+                <legend class="text-primary">Select at least 5 options that best match who you are, in the list below</legend>
+                <fieldset>
+                
+                    <div class="custom-control custom-checkbox mb-3">
+                        <input type="checkbox" class="custom-control-input" id="1" name="1" value="freethinker">
+                        <label class="custom-control-label" for="1">I am open to new experiences</label>
+                    </div>
+
+                    <div class="custom-control custom-checkbox mb-3">
+                        <input type="checkbox" class="custom-control-input" id="2" name="2" value="freethinker">
+                        <label class="custom-control-label" for="2">I love to shop locally</label>
+                    </div>
+                    
+                    <div class="custom-control custom-checkbox mb-3">
+                        <input type="checkbox" class="custom-control-input" id="3" name="3" value="freethinker">
+                        <label class="custom-control-label" for="3">I look after my Health and I am diet conscious</label>
+                    </div>
+
+                    <div class="custom-control custom-checkbox mb-3">
+                        <input type="checkbox" class="custom-control-input" id="4" name="4" value="freethinker">
+                        <label class="custom-control-label" for="4">I do not conform to opinions of others</label>
+                    </div>
+
+                    <div class="custom-control custom-checkbox mb-3">
+                        <input type="checkbox" class="custom-control-input" id="5" name="5" value="freethinker">
+                        <label class="custom-control-label" for="5">I am non-traditional</label>
+                    </div>
+
+                    <div class="custom-control custom-checkbox mb-3">
+                        <input type="checkbox" class="custom-control-input" id="6" name="6" value="freethinker">
+                        <label class="custom-control-label" for="6">I am inquisitive</label>
+                    </div>
+
+                    <div class="custom-control custom-checkbox mb-3">
+                        <input type="checkbox" class="custom-control-input" id="7" name="7" value="adrenaline_junkie">
+                        <label class="custom-control-label" for="7">I love a sale</label>
+                    </div>
+
+                    <div class="custom-control custom-checkbox mb-3">
+                        <input type="checkbox" class="custom-control-input" id="8" name="8" value="adrenaline_junkie">
+                        <label class="custom-control-label" for="8">I am easy going</label>
+                    </div>
+
+                    <div class="custom-control custom-checkbox mb-3">
+                        <input type="checkbox" class="custom-control-input" id="9" name="9" value="adrenaline_junkie">
+                        <label class="custom-control-label" for="9">I tend to be very self-reliant</label>
+                    </div>
+
+                    <div class="custom-control custom-checkbox mb-3">
+                        <input type="checkbox" class="custom-control-input" id="10" name="10" value="adrenaline_junkie">
+                        <label class="custom-control-label" for="10">I am a high achiever</label>
+                    </div>
+
+                    <div class="custom-control custom-checkbox mb-3">
+                        <input type="checkbox" class="custom-control-input" id="11" name="11" value="adrenaline_junkie">
+                        <label class="custom-control-label" for="11">I value having fun</label>
+                    </div>
+
+                    <div class="custom-control custom-checkbox mb-3">
+                        <input type="checkbox" class="custom-control-input" id="12" name="12" value="adrenaline_junkie">
+                        <label class="custom-control-label" for="12">I an adventure seeker</label>
+                    </div>
+
+                    <div class="custom-control custom-checkbox mb-3">
+                        <input type="checkbox" class="custom-control-input" id="13" name="13" value="optimist">
+                        <label class="custom-control-label" for="13">I am very outgoing and friendly</label>
+                    </div>
+
+                    <div class="custom-control custom-checkbox mb-3">
+                        <input type="checkbox" class="custom-control-input" id="14" name="14" value="optimist">
+                        <label class="custom-control-label" for="14">I am interested in fashion</label>
+                    </div>
+
+                    <div class="custom-control custom-checkbox mb-3">
+                        <input type="checkbox" class="custom-control-input" id="15" name="15" value="optimist">
+                        <label class="custom-control-label" for="15">I am innovative and unique</label>
+                    </div>
+
+                    <div class="custom-control custom-checkbox mb-3">
+                        <input type="checkbox" class="custom-control-input" id="16" name="16" value="optimist">
+                        <label class="custom-control-label" for="16">I am generous</label>
+                    </div>
+
+                </fieldset>
+                <br>
+                <input type="button" class="btn btn-outline-primary btn-block" onclick="chartIt()" value="Submit">
+            </form>
+        </div>
+        
+        
+        <div class="col-sm-6" style="background-color:rgb(205,205,205);">
+            <!-- this is ugly!!! -->
+            <br>
+            <br>
+            <br>
+            <br>
+            <!-- canvas to host a chart -->
+            <canvas id="chart"></canvas>
+        </div>
+    </div">
+        
+    <div class="row">
+
+    <div class="toast" data-autohide="false">
+    <div class="toast-header">
+        <strong class="mr-auto text-primary">Film reviews</strong>
+        <small class="text-muted">Just now</small>
+        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+    </div>
+    <div class="toast-body">
+        Film reviews will appear here once you have completed the personality test and chosen a dominant personality trait. <br>
+        Simply click on the sector corresponding to the trait you wish to prioritise, in the pole Area diagram.
+    </div>
+    </div>
+        <div id="yourReviews" class="col-sm-12" style="background-color:rgb(251,210,56);">
+
+            <!-- Collapsible menu -->
+            <nav id="reviewsMenu" class="navbar navbar-expand-md bg-dark navbar-dark sticky-top">
+                <a class="navbar-brand" href="#">Your film reviews</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                    <ul id="filmMenu" class="navbar-nav">
+                    <!-- Menu items are created in a loop in getReview() -->
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+    
+        <script>
+    
+            const reviewRules = {
+                "freethinker":['documentary','foreign films','cult classic', 'drama'],
+                "adrenaline_junkie":['science fiction','western', 'horror', 'action', 'war'],
+                "optimist":['comedy','animation', 'musical', 'romance', 'cartoon'],
+            }
+    
+            const NYTendpoint = 'https://api.nytimes.com/svc/movies/v2/reviews/search.json?query=';
+            const NYTkey = "&api-key=ueDCZJJ81l2hYJgrOL5rXN6UXA88WX08";
+
+            function checkIt(){
+                const personality = [];
+                // grab all the entries in the form
+                const formData = new FormData(document.getElementById('whoAreYou'));
+                // loop through the entries
+                for (const [key, value]  of formData.entries()) {
+                    // push each value to an array
+                    personality.push(value);
+                }
+                const count = {};
+                for (let i = 0; i < personality.length; i++) {
+                    const num = personality[i];
+                    // using the ternary operator
+                    // Ternary operator starts with conditional expression followed by ? operator. 
+                    // Second part ( after ? and before : operator) will be executed if condition turns out to be true. 
+                    // If condition becomes false then third part (after :) will be executed.
+                    count[num] = count[num] ? count[num] + 1 : 1; 
+                };
+                
+                const xLabels = [];
+                const yValues = [];
+                for (x in count) {
+                    xLabels.push(x);
+                    yValues.push(count[x]);
+                    };
+                    return {xLabels,yValues}
+                };
+    
+            async function chartIt(){
+                // retrieve the results of the questionaire
+                const results = await checkIt();
+                // console.log("TCL: chartIt -> results", results);
+    
+                // context of the chart (see chart.js documentation)
+                const ctx = document.getElementById('chart').getContext('2d');
+    
+                // prepare data
+                const data = {
+                    labels: results.xLabels,
+                    datasets: [{
+                        label: 'Your profile',
+                        data: results.yValues,
+                        backgroundColor: ['rgb(211,54,54)','rgb(245,203,203)','rgb(91,212,212)'],
+                        borderColor: 'rgba(40, 40, 40, 40)',
+                        borderWidth: 1
+                    }]
+                }
+                // prepare options
+                const options = {
+                    onClick: (evt, item) => {
+    
+                        // retrieve the personality trait corresponding to the clicked sector of the doughnut
+                        // const personalityTrait = item[0]._model.label;
+                        this.personalityTrait = item[0]._model.label;
+                        this.genres = reviewRules[this.personalityTrait];
+    
+                        for (i=0; i < genres.length; i++){
+                            this.genre = genres[i];                        
+                            // console.log("TCL: chartIt -> this.genre", this.genre);
+                            getReviews();
+                        }
+                    }
+                };   
+                // draw chart
+                const myChart = new Chart(ctx, {
+                    type: 'polarArea',
+                    data: data,
+                    options: options
+                });
+    
+                async function getReviews(){
+
+                    console.log("loading reviews using ",NYTkey);
+                    // genre needs to be set for the headers as this.genre will change through the loop
+                    // and document.body.append only happens once the loop is finished
+                    const reviewGenre = this.genre;
+                    
+                    // set the result of the async function to a variable 
+                    let response = await fetch(`https://api.nytimes.com/svc/movies/v2/reviews/search.json?query=${this.genre}${NYTkey}`);
+                    // parse the response 
+                    const data = await response.json();
+                    console.log("JSON parsed response", data);
+    
+                    // build DOM elements
+                    // const root = document.createElement('p');
+
+                    //     create the line item as <li class="nav-item">
+                    const li = document.createElement("li");
+                    li.className="nav-item";
+                    // create the link for the menu item as <a class="nav-link" href="#">Link</a>
+                    const menuItem = document.createElement("a");
+                    menuItem.className="nav-link";
+                    menuItem.href = `#${reviewGenre}`;
+                    menuItem.textContent = reviewGenre;
+
+                    // appendChild the link to the line
+                    li.appendChild(menuItem);
+
+                    // appendChild the line item (inc. appended link) to the <ul id="filmMenu">
+                    const ul = document.getElementById("filmMenu");
+                    ul.appendChild(li);
+
+                    const root = document.getElementById("yourReviews");
+
+                    // reference the <nav> for the menu
+                    // const reviewsMenu = document.getElementById("reviewsMenu");
+                    // CREATE MENU ITEMS HERE THEN childAPPEND THEM TO reviewsMenu 
+
+                    const header = document.createElement('h2');
+                    // create an id for the h2 that will be the anchor the menu points to
+                    header.id = reviewGenre;
+
+                    // instantiate h2 (header) element
+                    header.textContent = `GENRE: ${reviewGenre}`;
+    
+                    // append h2 to DOM
+                    root.append(header);
+
+                    // creating columns for cards
+                    const col = document.createElement("div");
+                    col.className="card-columns";
+
+    
+                    for (i in data.results) {
+
+                        // creating bootstrap cards
+                        // create the div for the card and assign the bootstrap attributes
+                        const card = document.createElement('div');
+                        card.className = "card bg-light";
+                        card.style="width:500px";
+
+                        // Try to get an image
+                        // create the image tag and assign the necessary attributes for the card
+                        const image = document.createElement('img');
+                        image.className = "card-img-top";
+                        image.style = "width:100%";
+                        try{
+                            // retrieve the image and assign it to the src of the img
+                            image.src = data.results[i].multimedia.src;
+                            // append the image to the card
+                            card.appendChild(image);
+                        } catch (error) { 
+                            // if there is an error, the image will never be appended to the card
+                            console.log('Multimedia src cannot be read')
+                        }
+
+                        // Build the body of the card
+                        const card_body = document.createElement('div');
+                        card_body.className = "card-body";
+                        // use an h4 for the title and assign the correct attribute
+                        const display_title = document.createElement('h4');
+                        display_title.className="card-title";
+                        const summary_short = document.createElement('p');
+                        // Create a p for the content of the card and assign the correct attribute
+                        summary_short.className="card-text";
+                        // create a button
+                        const link = document.createElement('a');
+                        link.className="btn btn-primary";
+    
+                        // instantiate DOM elements
+                        display_title.textContent = `Display title : ${data.results[i].display_title}`;
+                        summary_short.textContent = `Summary : ${data.results[i].summary_short}`;
+                        link.textContent = "Review link";
+                        link.href = data.results[i].link.url;
+                        link.target = '_blank';
+    
+                        // append to the card body
+                        card_body.appendChild(display_title);
+                        card_body.appendChild(summary_short);
+                        card_body.appendChild(link);
+                        card.appendChild(card_body);
+                        col.append(card);
+
+                        // add a break between each card
+                        const br = document.createElement("br");
+                        col.append(br);
+                    }
+                    root.append(col);
+                    document.body.append(root);
+                };
+            };  
+        </script>
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+        <script>
+              $(document).ready(function(){
+              $('.toast').toast('show');
+              });
+        </script>
+            
+    
+        <!-- Popper JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+</div>
+</body>
+</html>

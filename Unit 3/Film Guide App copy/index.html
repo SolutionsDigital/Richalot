@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta id="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- CDN for the chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+
+    <title>Film Guide App</title>
+</head>
+
+    <h1>Tell me who you are, I'll tell you what to watch!</h1>
+    <h2>People prefer movies and atmospheres that reinforce their own personality traits, preferences and values</h2>
+    <h3>Who are you?</h3>
+    
+    <form id="whoAreYou" action="">
+        <legend>Select at least 5 options that best match who you are, in the list below</legend>
+        <fieldset>
+            <input type="checkbox" name="1" value="freethinker">I am open to new experiences<br>
+            <input type="checkbox" name="2" value="freethinker">I loves to shop locally<br>
+            <input type="checkbox" name="3" value="freethinker">I look after my Health and I am diet conscious<br>
+            <input type="checkbox" name="4" value="freethinker">I do not conform to opinions of others<br>
+            <input type="checkbox" name="5" value="freethinker">I am non-traditional<br>
+            <input type="checkbox" name="6" value="freethinker">I am Inquisitive<br>
+            <input type="checkbox" name="7" value="adrenaline_junkie">I love a sale<br>
+            <input type="checkbox" name="8" value="adrenaline_junkie">I am Easy-going<br>
+            <input type="checkbox" name="9" value="adrenaline_junkie">I tend tend to be very self-reliant<br>
+            <input type="checkbox" name="10" value="adrenaline_junkie">I am a high achiever<br>
+            <input type="checkbox" name="11" value="adrenaline_junkie">I value having fun<br>
+            <input type="checkbox" name="12" value="adrenaline_junkie">I am an adventure seeker<br>
+            <input type="checkbox" name="13" value="optimist">I am very outgoing and friendly<br>
+            <input type="checkbox" name="14" value="optimist">I am interested in fashion<br>
+            <input type="checkbox" name="15" value="optimist">I am innovative and unique<br>
+            <input type="checkbox" name="16" value="optimist">I am generous<br>
+        </fieldset>
+        <input type="button" onclick="chartIt()" value="Submit">
+    </form>
+    <!-- canvas to host a chart -->
+    <br>
+    <canvas id="chart" width="800" height="400"></canvas>
+    <div>
+        <span id="yourReviews"></span>
+    </div>
+
+    <script>
+
+        const reviewRules = {
+            "freethinker":['documentary','foreign films','cult classic', 'drama'],
+            "adrenaline_junkie":['science fiction','western', 'horror', 'action', 'war'],
+            "optimist":['comedy','animation', 'musical', 'romance', 'kids movies'],
+        }
+
+        const NYTendpoint = 'https://api.nytimes.com/svc/movies/v2/reviews/search.json?query=';
+        const NYTkey = '&api-key=bcdFNGzDD9NVOPjwTOAYE6m0QYVsxjtd';
+
+
+        function checkIt(){
+            const personality = [];
+            // grab all the entries in the form
+            const formData = new FormData(document.getElementById('whoAreYou'));
+            // loop through the entries
+            for (const [key, value]  of formData.entries()) {
+                // push each value to an array
+                personality.push(value);
+            }
+            const count = {};
+            for (let i = 0; i < personality.length; i++) {
+                const num = personality[i];
+                // using the ternary operator
+                // Ternary operator starts with conditional expression followed by ? operator. 
+                // Second part ( after ? and before : operator) will be executed if condition turns out to be true. 
+                // If condition becomes false then third part (after :) will be executed.
+                count[num] = count[num] ? count[num] + 1 : 1; 
+            };
+            
+            const xLabels = [];
+            const yValues = [];
+            for (x in count) {
+                xLabels.push(x);
+                yValues.push(count[x]);
+                };
+                return {xLabels,yValues}
+            };
+
+        async function chartIt(){
+            // retrieve the results of the questionaire
+            const results = await checkIt();
+            // console.log("TCL: chartIt -> results", results);
+
+            // context of the chart (see chart.js documentation)
+            const ctx = document.getElementById('chart').getContext('2d');
+
+            // prepare data
+            const data = {
+                labels: results.xLabels,
+                datasets: [{
+                    label: 'Your profile',
+                    data: results.yValues,
+                    backgroundColor: ['rgba(1, 99, 132, 0.2)','rgba(100, 99, 132, 0.2)','rgba(100, 1, 132, 0.2)'],
+                    borderColor: 'rgba(1, 1, 1, 1)',
+                    borderWidth: 1
+                }]
+            }
+            // prepare options
+            const options = {
+                onClick: (evt, item) => {
+
+                    // retrieve the personality trait corresponding to the clicked sector of the doughnut
+                    // const personalityTrait = item[0]._model.label;
+                    this.personalityTrait = item[0]._model.label;
+                    this.genres = reviewRules[this.personalityTrait];
+
+                    for (i=0; i < genres.length; i++){
+                        this.genre = genres[i];                        
+                        // console.log("TCL: chartIt -> this.genre", this.genre);
+                        getReviews();
+                    }
+                }
+            };   
+            // draw chart
+            const myChart = new Chart(ctx, {
+                type: 'polarArea',
+                data: data,
+                options: options
+            });
+
+            async function getReviews(){
+                // genre needs to be set for the headers as this.genre will change through the loop
+                // and document.body.append only happens once the loop is finished
+                const reviewGenre = this.genre;
+                
+                // set the result of the async function to a variable 
+                let response = await fetch(`https://api.nytimes.com/svc/movies/v2/reviews/search.json?query=${this.genre}&api-key=bcdFNGzDD9NVOPjwTOAYE6m0QYVsxjtd`);
+                // parse the response 
+                const data = await response.json();
+                console.log("JSON parsed response", data);
+
+                // build DOM
+                const root = document.createElement('p');
+                const header = document.createElement('h1'); 
+
+                // instantiate h1 (header) element
+                header.textContent = `GENRE: ${reviewGenre}`;
+
+                // append h1 to DOM
+                root.append(header);
+
+                for (i in data.results) {
+                    // build sub sections of the DOM
+                    const display_title = document.createElement('div');
+                    const summary_short = document.createElement('div');
+                    const link = document.createElement('a');
+
+                    // instantiate DOM elements
+                    display_title.textContent = `Display title : ${data.results[i].display_title}`;
+                    summary_short.textContent = `Summary : ${data.results[i].summary_short}`;
+                    link.textContent = data.results[i].link.url;
+                    link.href = data.results[i].link.url;
+                    link.target = '_blank';
+
+                    try{
+                        const image = document.createElement('img');
+                        image.src = data.results[i].multimedia.src;
+                        root.append(image)
+                    } catch (error) { 
+                        console.log('Multimedia src cannot be read')
+                        }
+
+                    // append to document
+                    root.append(display_title, summary_short, link);
+                }
+                document.body.append(root);
+            };
+        };  
+    </script>    
+</body>
+</html>

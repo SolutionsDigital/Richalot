@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="eng">
+    <head>
+        <title>Fetch reviews from the NYT</title>
+    </head>
+    <body>
+        <h1>Example of fetch() function</h1>
+        <div id="reviews"></div>
+        <script>
+            // call the function
+            getReviews()
+
+            async function getReviews(){
+                // set the result of the async function to a variable 
+                const response = await fetch("https://api.nytimes.com/svc/movies/v2/reviews/search.json?query=comedy&api-key=bcdFNGzDD9NVOPjwTOAYE6m0QYVsxjtd");
+                console.log("Just the response", response)
+
+                // same for the json response
+                const data = await response.json();
+                console.log("JSON parsed response", data);
+                // document.getElementById("review") = URL.createObjectURL(json);
+                for (i in data.results) {
+
+                    // build DOM
+                    const root = document.createElement('p');
+                    const display_title = document.createElement('div');
+                    const summary_short = document.createElement('div');
+                    const image = document.createElement('img');
+                    const link = document.createElement('a');
+
+                    // instantiate DOM elements
+                    display_title.textContent = `Display title : ${data.results[i].display_title}`;
+                    summary_short.textContent = `Summary : ${data.results[i].summary_short}`;
+
+                    try{
+                        const image = document.createElement('img');
+                        image.src = data.results[i].multimedia.src;
+                        root.append(image)
+                    } catch (error) { 
+                        console.log('Multimedia src cannot be read')
+                    }
+
+                    link.textContent = data.results[i].link.url;
+                    link.href = data.results[i].link.url;
+                    link.target = '_blank';
+
+                    // append to document
+                    root.append(display_title, summary_short, link);
+                    // document.body.append(root);
+                    document.body.append(root);
+                }
+            };
+        </script>
+    </body>
+</html>

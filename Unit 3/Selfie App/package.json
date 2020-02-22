@@ -1,0 +1,21 @@
+{
+  "name": "selfie-app",
+  "version": "1.0.0",
+  "description": "The data selfie app by Joey Lee adapted fro DSL Unit 3 based on Dan Schifman's Coding Train",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "database",
+    "API",
+    "selfie",
+    "geolocation"
+  ],
+  "author": "Jerome Richalot",
+  "license": "MIT as per original work",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nedb": "^1.8.0"
+  }
+}
